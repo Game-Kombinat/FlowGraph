@@ -60,10 +60,18 @@ FFlowNode_GameDataContextSelectorDetails::GetInitiallySelectedObject() {
     if (!outerNode) {
         return nullptr;
     }
+    if (PropertyHandle->GetNumPerObjectValues() > 1) {
+        return MakeShareable(new FGameDataContextKey("Multiple Values", -1));
+    }
+    
     void* rawValue = nullptr;
     auto member = PropertyHandle->GetChildHandle(GET_MEMBER_NAME_CHECKED(FGameDataContextKey, guid));
     member->GetValueData(rawValue);
     FGuid* selectedKey = static_cast<FGuid*>(rawValue);
+    if (!selectedKey) {
+        UE_LOG(LogTemp, Error, TEXT("Failed to get value for selected properties GUID. Address invalid."));
+        return nullptr;
+    }
     int idx = keyList.IndexOfByPredicate([&](FItemType x) {
         return x.Get()->guid == *selectedKey;
     });
@@ -96,6 +104,9 @@ void FFlowNode_GameDataContextSelectorDetails::OnSelectionChanged(const FItemTyp
     // I have not the faintest idea why that is. I'm probably getting something confuzzled.
     // Important part is: it works
     PropertyHandle->GetValueData(rawValue);
+    if (PropertyHandle->GetNumPerObjectValues() > 1) {
+        return;
+    }
     FGameDataContextKey* keyInParent = static_cast<FGameDataContextKey*>(rawValue);
     keyInParent->guid = newItem->guid;
     keyInParent->name = newItem->name;
