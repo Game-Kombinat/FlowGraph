@@ -80,7 +80,8 @@ FFlowNode_GameDataContextSelectorDetails::GetInitiallySelectedObject() {
         selectedObject = keyList[idx];
         return keyList[idx];
     }
-    return keyList[0];
+    
+    return nullptr;
 }
 
 void FFlowNode_GameDataContextSelectorDetails::CollectDataContextKeys() {
@@ -144,7 +145,7 @@ TSharedRef<SWidget> FFlowNode_GameDataContextSelectorDetails::GenerateEventWidge
 
 FText FFlowNode_GameDataContextSelectorDetails::GetSelectedKeyDisplayName() const {
     if (!selectedObject.IsValid()) {
-        return FText::FromString("Invalid");
+        return FText::FromString("None");
     }
     return  FText::FromString(selectedObject.Get()->name.ToString());
 }
