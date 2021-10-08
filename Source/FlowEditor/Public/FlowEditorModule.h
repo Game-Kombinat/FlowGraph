@@ -19,7 +19,7 @@ public:
 
 private:
 	TArray<TSharedRef<IAssetTypeActions>> RegisteredAssetActions;
-	TSet<FName> CustomClassLayouts;
+	TSet<FName> CustomClassLayouts; 
 	TSharedPtr<FGraphPanelPinConnectionFactory> FlowGraphConnectionFactory;
 
 public:
@@ -30,7 +30,7 @@ private:
 	void RegisterAssets();
 	void UnregisterAssets();
 
-	void RegisterPropertyCustomizations() const;
+	void RegisterPropertyCustomizations();
 	void RegisterCustomClassLayout(const TSubclassOf<UObject> Class, const FOnGetDetailCustomizationInstance DetailLayout);
 
 public:

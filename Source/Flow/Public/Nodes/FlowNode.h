@@ -92,6 +92,7 @@ public:
 
 	UFUNCTION(BlueprintPure, Category = "FlowNode")
 	UFlowAsset* GetFlowAsset() const;
+	class UGameDataContext* GetDataContext() const;
 
 //////////////////////////////////////////////////////////////////////////
 // All created pins (default, class-specific and added by user)

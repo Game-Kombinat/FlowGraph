@@ -3,6 +3,7 @@
 #include "CoreMinimal.h"
 #include "FlowSave.h"
 #include "FlowTypes.h"
+#include "GameDataContext.h"
 #include "FlowAsset.generated.h"
 
 class UFlowNode;
@@ -99,6 +100,13 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Flow")
 	TArray<FName> CustomOutputs;
 
+	/**
+	 * The data context that is available to this flow asset.
+	 * Needs checking in regards to persistence when saving/loading and using
+	 * the same instance on multiple flow assets
+	 */
+	UPROPERTY(EditAnywhere, Category = "Flow", SaveGame)
+	UGameDataContext* dataContext;
 public:
 #if WITH_EDITOR
 	FFlowAssetEvent OnSubGraphReconstructionRequested;
@@ -117,6 +125,16 @@ public:
 
 	TArray<FName> GetCustomInputs() const { return CustomInputs; }
 	TArray<FName> GetCustomOutputs() const { return CustomOutputs; }
+
+	UGameDataContext* GetDataContext()
+	{
+		if (dataContext) {
+			return dataContext;
+		}
+		// destroys const-ness but makes sure we're not crashing because of people being stoopid
+		dataContext = NewObject<UGameDataContext>();
+		return dataContext;
+	}
 
 //////////////////////////////////////////////////////////////////////////
 // Instances of the template asset

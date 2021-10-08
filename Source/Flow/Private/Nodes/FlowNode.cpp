@@ -141,6 +141,10 @@ UFlowAsset* UFlowNode::GetFlowAsset() const
 	return GetOuter() ? Cast<UFlowAsset>(GetOuter()) : nullptr;
 }
 
+UGameDataContext* UFlowNode::GetDataContext() const {
+	return GetFlowAsset()->GetDataContext();
+}
+
 void UFlowNode::AddInputPins(TArray<FName> PinNames)
 {
 	for (const FName& PinName : PinNames)

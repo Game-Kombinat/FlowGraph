@@ -17,7 +17,8 @@ public class Flow : ModuleRules
 			"MovieScene",
 			"MovieSceneTracks",
             "Slate",
-            "SlateCore"
+            "SlateCore",
+            "AIModule" // For the blackboard stuff
         });
 
         if (Target.Type == TargetType.Editor)

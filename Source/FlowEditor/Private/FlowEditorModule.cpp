@@ -28,6 +28,7 @@
 #include "ISequencerModule.h"
 #include "LevelEditor.h"
 #include "Modules/ModuleManager.h"
+#include "Nodes/Customizations/FlowNode_GameDataContextSelectorDetails.h"
 
 #define LOCTEXT_NAMESPACE "FlowEditor"
 
@@ -66,6 +67,7 @@ void FFlowEditorModule::StartupModule()
 	RegisterCustomClassLayout(UFlowNode_CustomInput::StaticClass(), FOnGetDetailCustomizationInstance::CreateStatic(&FFlowNode_CustomInputDetails::MakeInstance));
 	RegisterCustomClassLayout(UFlowNode_CustomOutput::StaticClass(), FOnGetDetailCustomizationInstance::CreateStatic(&FFlowNode_CustomOutputDetails::MakeInstance));
 	RegisterCustomClassLayout(UFlowNode_PlayLevelSequence::StaticClass(), FOnGetDetailCustomizationInstance::CreateStatic(&FFlowNode_PlayLevelSequenceDetails::MakeInstance));
+	// RegisterCustomClassLayout(TSubclassOf<FGameDataContextKey>(), FOnGetDetailCustomizationInstance::CreateRaw());
 
 	FPropertyEditorModule& PropertyModule = FModuleManager::GetModuleChecked<FPropertyEditorModule>("PropertyEditor");
 	PropertyModule.NotifyCustomizationModuleChanged();
@@ -97,6 +99,7 @@ void FFlowEditorModule::ShutdownModule()
 			if (It->IsValid())
 			{
 				PropertyModule.UnregisterCustomClassLayout(*It);
+				PropertyModule.UnregisterCustomPropertyTypeLayout(*It);
 			}
 		}
 	}
@@ -130,10 +133,17 @@ void FFlowEditorModule::UnregisterAssets()
 	RegisteredAssetActions.Empty();
 }
 
-void FFlowEditorModule::RegisterPropertyCustomizations() const
+void FFlowEditorModule::RegisterPropertyCustomizations()
 {
 	FPropertyEditorModule& PropertyModule = FModuleManager::LoadModuleChecked<FPropertyEditorModule>("PropertyEditor");
-
+	const FName dcName = FGameDataContextKey::StaticStruct()->GetFName();
+	
+	PropertyModule.RegisterCustomPropertyTypeLayout(
+		dcName,
+		FOnGetPropertyTypeCustomizationInstance::CreateStatic(&FFlowNode_GameDataContextSelectorDetails::MakeInstance)
+	);
+	// we can add this here, it'll be handled with the class layouts when unregistering in one go.
+	CustomClassLayouts.Add(dcName);
 	// notify on customization change
 	PropertyModule.NotifyCustomizationModuleChanged();
 }
