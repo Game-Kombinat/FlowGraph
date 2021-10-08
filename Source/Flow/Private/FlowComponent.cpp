@@ -331,6 +331,16 @@ void UFlowComponent::StartRootFlow()
 	}
 }
 
+void UFlowComponent::StartNamedFlow(FName inputName) {
+	if (RootFlow && IsFlowNetMode(RootFlowMode))
+	{
+		if (UFlowSubsystem* FlowSubsystem = GetFlowSubsystem())
+		{
+			FlowSubsystem->StartNamedFlow(this, RootFlow, inputName, bAllowMultipleInstances);
+		}
+	}
+}
+
 void UFlowComponent::FinishRootFlow(const EFlowFinishPolicy FinishPolicy)
 {
 	if (UFlowSubsystem* FlowSubsystem = GetFlowSubsystem())

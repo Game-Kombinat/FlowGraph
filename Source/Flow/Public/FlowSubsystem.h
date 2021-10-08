@@ -60,6 +60,8 @@ public:
 	// Start the root Flow, graph that will eventually instantiate next Flow Graphs through the SubGraph node
 	UFUNCTION(BlueprintCallable, Category = "FlowSubsystem")
 	void StartRootFlow(UObject* Owner, UFlowAsset* FlowAsset, const bool bAllowMultipleInstances = true);
+	UFUNCTION(BlueprintCallable, Category = "FlowSubsystem")
+	void StartNamedFlow(UObject* Owner, UFlowAsset* FlowAsset, FName inputName, const bool bAllowMultipleInstances = true);
 
 protected:
 	UFlowAsset* CreateRootFlow(UObject* Owner, UFlowAsset* FlowAsset, const bool bAllowMultipleInstances = true);
@@ -68,6 +70,9 @@ public:
 	// Finish the root Flow, typically when closing world that created this flow
 	UFUNCTION(BlueprintCallable, Category = "FlowSubsystem")
 	void FinishRootFlow(UObject* Owner, const EFlowFinishPolicy FinishPolicy);
+	/** Internally calls FinishRootFlow because this covers any and all execution paths also from custom inputs. But the name is more obvious */
+	UFUNCTION(BlueprintCallable, Category = "FlowSubsystem")
+	void EndNodeExecution(UObject* Owner, const EFlowFinishPolicy FinishPolicy);
 
 private:
 	UFlowAsset* CreateSubFlow(UFlowNode_SubGraph* SubGraphNode, const FString NewInstanceName = FString(), const bool bPreloading = false);

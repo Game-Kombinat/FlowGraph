@@ -184,6 +184,8 @@ public:
 	// Created Flow Asset instance will be a "root flow", as additional Flow Assets can be instantiated via Sub Graph node
 	UFUNCTION(BlueprintCallable, Category = "RootFlow")
 	void StartRootFlow();
+	UFUNCTION(BlueprintCallable, Category = "RootFlow")
+	void StartNamedFlow(FName inputName);
 
 	// This will destroy instantiated Flow Asset - created from asset assigned on this component.
 	UFUNCTION(BlueprintCallable, Category = "RootFlow")

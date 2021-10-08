@@ -227,6 +227,7 @@ public:
 
 	virtual void PreStartFlow();
 	virtual void StartFlow();
+	virtual void StartNamedFlow(const FName name);
 	
 	virtual void FinishFlow(const EFlowFinishPolicy InFinishPolicy);
 

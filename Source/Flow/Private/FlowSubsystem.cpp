@@ -63,6 +63,14 @@ void UFlowSubsystem::StartRootFlow(UObject* Owner, UFlowAsset* FlowAsset, const 
 	}
 }
 
+void UFlowSubsystem::StartNamedFlow(UObject* Owner, UFlowAsset* FlowAsset, FName inputName, const bool bAllowMultipleInstances) {
+	UFlowAsset* NewFlow = CreateRootFlow(Owner, FlowAsset, bAllowMultipleInstances);
+	if (NewFlow)
+	{
+		NewFlow->StartNamedFlow(inputName);
+	}
+}
+
 UFlowAsset* UFlowSubsystem::CreateRootFlow(UObject* Owner, UFlowAsset* FlowAsset, const bool bAllowMultipleInstances)
 {
 	if (RootInstances.Contains(Owner))
@@ -90,6 +98,10 @@ void UFlowSubsystem::FinishRootFlow(UObject* Owner, const EFlowFinishPolicy Fini
 		RootInstances.Remove(Owner);
 		Instance->FinishFlow(FinishPolicy);
 	}
+}
+
+void UFlowSubsystem::EndNodeExecution(UObject* Owner, const EFlowFinishPolicy FinishPolicy) {
+	FinishRootFlow(Owner, FinishPolicy);
 }
 
 UFlowAsset* UFlowSubsystem::CreateSubFlow(UFlowNode_SubGraph* SubGraphNode, const FString NewInstanceName, const bool bPreloading /* = false */)
