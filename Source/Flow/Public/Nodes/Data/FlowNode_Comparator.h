@@ -29,4 +29,8 @@ protected:
     FGameDataContextKey keyB;
     
     virtual void ExecuteInput(const FName& pinName) override;
+
+#if WITH_EDITOR
+    virtual FString GetNodeDescription() const override;
+#endif
 };

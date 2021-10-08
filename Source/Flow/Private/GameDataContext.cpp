@@ -6,26 +6,26 @@
 // }
 
 bool UGameDataContext::GetTruthyness(const FGameDataContextKey key) {
-    // FGameDataContextKey out;
-    // if (FindEntry(key, out)) {
-    //     return out.value > 0;
-    // }
+    FGameDataContextKey out;
+    if (FindEntry(key, out)) {
+        return out.value > 0;
+    }
     return false;
 }
 
 int32 UGameDataContext::GetValue(const FGameDataContextKey key) {
-    // FGameDataContextKey out;
-    // if (FindEntry(key, out)) {
-    //     return out.value;
-    // }
+    FGameDataContextKey out;
+    if (FindEntry(key, out)) {
+        return out.value;
+    }
     return -1;
 }
 
 void UGameDataContext::SetValue(const FGameDataContextKey key) {
-    // int32 idx = GetIndex(key);
-    // if (idx != INDEX_NONE) {
-    //     data[idx] = key;
-    // }
+    const int32 idx = GetIndex(key);
+    if (idx != INDEX_NONE) {
+        data[idx] = key;
+    }
 }
 
 TArray<FGameDataContextKey> UGameDataContext::GetKeyList() {
@@ -52,15 +52,14 @@ void UGameDataContext::InvalidateKeyCache() {
 
 bool UGameDataContext::FindEntry(const FGameDataContextKey key, FGameDataContextKey& out) {
     // data->
-    // int32 idx = data.IndexOfByKey(key);
-    // if (idx != INDEX_NONE) {
-    //     out = data[idx];
-    //     return true;
-    // }
+    const int32 idx = data.IndexOfByKey(key);
+    if (idx != INDEX_NONE) {
+        out = data[idx];
+        return true;
+    }
     return false;
 }
 
 int32 UGameDataContext::GetIndex(const FGameDataContextKey key) const {
-    // return data.IndexOfByKey(key);
-    return -1;
+    return data.IndexOfByKey(key);
 }

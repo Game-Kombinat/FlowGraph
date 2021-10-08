@@ -27,8 +27,7 @@ struct FGameDataContextKey {
 
     explicit FGameDataContextKey() : name("None"), value(-1), guid(FGuid::NewGuid()) {}
     explicit FGameDataContextKey(FName keyName, int32 keyValue) : name(keyName), value(keyValue), guid(FGuid::NewGuid()) {}
-    // apparently USTRUCT implicitly generates a copy constructor
-    // explicit FGameDataContextKey(FGameDataContextKey original) : name(original.name), value(original.value), guid(original.guid) {}
+    FGameDataContextKey(const FGameDataContextKey& original) : name(original.name), value(original.value), guid(original.guid) {}
 };
 /**
 * 
