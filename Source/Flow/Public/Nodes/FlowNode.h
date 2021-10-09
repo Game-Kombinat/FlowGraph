@@ -200,6 +200,9 @@ public:
 
 	virtual UWorld* GetWorld() const override;
 
+	UFUNCTION(BlueprintCallable, Category = "FlowNode", meta = (DisplayName = "Get World"))
+	UWorld* K2_GetWorld() const;
+
 protected:
 	// Method called just after creating the node instance, while initializing the Flow Asset instance
 	// This happens before executing graph, only called during gameplay

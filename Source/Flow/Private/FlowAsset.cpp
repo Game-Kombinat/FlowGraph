@@ -16,10 +16,10 @@ UFlowAsset::UFlowAsset(const FObjectInitializer& ObjectInitializer)
 #if WITH_EDITOR
 	, FlowGraph(nullptr)
 #endif
+	, dataContext(nullptr)
 	, TemplateAsset(nullptr)
 	, StartNode(nullptr)
 	, FinishPolicy(EFlowFinishPolicy::Keep)
-	, dataContext(nullptr)
 {
 }
 

@@ -12,7 +12,6 @@ UCLASS(BlueprintType)
 class FLOW_API UFlowNodeBlueprint final : public UBlueprint
 {
 	GENERATED_UCLASS_BODY()
-
 #if WITH_EDITOR
 	// UBlueprint
 	virtual bool SupportedByDefaultBlueprintFactory() const override { return false; }

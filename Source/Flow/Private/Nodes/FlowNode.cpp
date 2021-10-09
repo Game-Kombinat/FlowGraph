@@ -284,6 +284,10 @@ UWorld* UFlowNode::GetWorld() const
 	return nullptr;
 }
 
+UWorld* UFlowNode::K2_GetWorld() const {
+	return GetWorld();
+}
+
 void UFlowNode::InitializeInstance()
 {
 	K2_InitializeInstance();
