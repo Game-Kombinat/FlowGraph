@@ -230,6 +230,7 @@ void UFlowAsset::InitializeInstance(const TWeakObjectPtr<UObject> InOwner, UFlow
 {
 	Owner = InOwner;
 	TemplateAsset = InTemplateAsset;
+	dataContext->PrepareRuntimeData(InOwner);
 
 	for (TPair<FGuid, UFlowNode*>& Node : Nodes)
 	{

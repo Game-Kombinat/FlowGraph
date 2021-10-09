@@ -13,7 +13,7 @@ bool UGameDataContext::GetTruthyness(const FGameDataContextKey key) {
     return false;
 }
 
-int32 UGameDataContext::GetValue(const FGameDataContextKey key) {
+int32 UGameDataContext::GetValue(const FGameDataContextKey key) const {
     FGameDataContextKey out;
     if (FindEntry(key, out)) {
         return out.value;
@@ -21,10 +21,13 @@ int32 UGameDataContext::GetValue(const FGameDataContextKey key) {
     return -1;
 }
 
-void UGameDataContext::SetValue(const FGameDataContextKey key) {
+void UGameDataContext::SetValue(const FGameDataContextKey key) const {
     const int32 idx = GetIndex(key);
     if (idx != INDEX_NONE) {
-        data[idx] = key;
+        runtimeInstance->data[idx] = key;
+    }
+    else if (parent) {
+        parent->SetValue(key);
     }
 }
 
@@ -50,16 +53,47 @@ void UGameDataContext::InvalidateKeyCache() {
     consolidatedKeyList.Empty();
 }
 
-bool UGameDataContext::FindEntry(const FGameDataContextKey key, FGameDataContextKey& out) {
-    // data->
-    const int32 idx = data.IndexOfByKey(key);
+bool UGameDataContext::FindEntry(const FGameDataContextKey key, FGameDataContextKey& out) const {
+    if (!runtimeInstance.IsValid()) {
+        return false;
+    }
+    const int32 idx = GetIndex(key);
     if (idx != INDEX_NONE) {
-        out = data[idx];
+        out = runtimeInstance->data[idx];
         return true;
+    }
+    if (parent) {
+        return parent->FindEntry(key, out);
     }
     return false;
 }
 
-int32 UGameDataContext::GetIndex(const FGameDataContextKey key) const {
-    return data.IndexOfByKey(key);
+void UGameDataContext::InternalSpawnRuntimeData(const TWeakObjectPtr<UObject>& worldContext) {
+    if (!worldContext.IsValid()) {
+        UE_LOG(LogTemp, Error, TEXT("World context invalid for %s!"), *GetFName().ToString());
+        return;
+    }
+    const auto world = worldContext->GetWorld();
+    if (!world) {
+        UE_LOG(LogTemp, Error, TEXT("No world found in world context object!"));
+        return;
+    }
+    runtimeInstance = NewObject<UGameDataContext>(world, FName(FString::Format(TEXT("{0}_Runtime"), {GetFName().ToString()})), RF_Transient, this);
+}
+
+int32 UGameDataContext::GetIndex(const FGameDataContextKey& key) const {
+    if (!runtimeInstance.IsValid()) {
+        return INDEX_NONE;
+    }
+    return runtimeInstance->data.IndexOfByKey(key);
+}
+
+void UGameDataContext::PrepareRuntimeData(const TWeakObjectPtr<UObject>& worldContext) {
+    if (parent) {
+        parent->PrepareRuntimeData(worldContext);
+    }
+
+    if (!runtimeInstance.IsValid()) {
+        InternalSpawnRuntimeData(worldContext);
+    }
 }
