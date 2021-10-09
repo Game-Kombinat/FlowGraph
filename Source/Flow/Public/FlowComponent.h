@@ -166,7 +166,7 @@ public:
 	UFlowAsset* RootFlow;
 
 	// If true, component will start Root Flow on Begin Play
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "RootFlow")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "RootFlow")
 	bool bAutoStartRootFlow;
 
 	// Networking mode for creating this Root Flow
