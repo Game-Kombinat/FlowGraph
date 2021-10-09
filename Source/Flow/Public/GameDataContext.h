@@ -38,10 +38,6 @@ class FLOW_API UGameDataContext : public UDataAsset {
     TArray<FGameDataContextKey> consolidatedKeyList;
     bool keyListGenerated;
 protected:
-    // /** Used to determine the world in which we spawn the runtime data into. */
-    // UPROPERTY(EditAnywhere, BlueprintReadOnly)
-    // TSoftObjectPtr<UObject> worldContextObject;
-    
     UPROPERTY(EditAnywhere, BlueprintReadOnly)
     UGameDataContext* parent;
     

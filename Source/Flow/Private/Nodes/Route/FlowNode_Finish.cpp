@@ -1,6 +1,6 @@
 #include "Nodes/Route/FlowNode_Finish.h"
 
-UFlowNode_Finish::UFlowNode_Finish(const FObjectInitializer& ObjectInitializer)
+UDEPRECATED_FlowNode_Finish::UDEPRECATED_FlowNode_Finish(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
 {
 #if WITH_EDITOR
@@ -11,7 +11,7 @@ UFlowNode_Finish::UFlowNode_Finish(const FObjectInitializer& ObjectInitializer)
 	OutputPins = {};
 }
 
-void UFlowNode_Finish::ExecuteInput(const FName& PinName)
+void UDEPRECATED_FlowNode_Finish::ExecuteInput(const FName& PinName)
 {
 	// this will call FinishFlow()
 	Finish();

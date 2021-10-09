@@ -5,7 +5,7 @@
 #include "Nodes/FlowNode.h"
 #include "Nodes/Route/FlowNode_CustomInput.h"
 #include "Nodes/Route/FlowNode_Start.h"
-#include "Nodes/Route/FlowNode_Finish.h"
+#include "Nodes/Route/FlowNode_FinishFlow.h"
 #include "Nodes/Route/FlowNode_SubGraph.h"
 
 #include "Serialization/MemoryReader.h"
@@ -19,6 +19,7 @@ UFlowAsset::UFlowAsset(const FObjectInitializer& ObjectInitializer)
 	, TemplateAsset(nullptr)
 	, StartNode(nullptr)
 	, FinishPolicy(EFlowFinishPolicy::Keep)
+	, dataContext(nullptr)
 {
 }
 
@@ -324,10 +325,12 @@ void UFlowAsset::FinishFlow(const EFlowFinishPolicy InFinishPolicy)
 {
 	FinishPolicy = InFinishPolicy;
 
-	// end execution of this asset and all of its nodes
-	for (UFlowNode* Node : ActiveNodes)
+	// this will call Cleanup on nodes that had InitInstance called on them (which is all nodes).
+	// didn't seem to make much sense to do that only on nodes that were actually triggered
+	// because if we wanna do this, then we should only call InitInstance on triggering nodes too.
+	for (const auto Node : Nodes)
 	{
-		Node->Deactivate();
+		Node.Value->Deactivate();
 	}
 	ActiveNodes.Empty();
 
@@ -390,7 +393,7 @@ void UFlowAsset::FinishNode(UFlowNode* Node)
 		ActiveNodes.Remove(Node);
 
 		// if graph reached Finish and this asset instance was created by SubGraph node
-		if (Node->GetClass()->IsChildOf(UFlowNode_Finish::StaticClass()) && NodeOwningThisAssetInstance.IsValid())
+		if (Node->GetClass()->IsChildOf(UFlowNode_FinishFlow::StaticClass()) && NodeOwningThisAssetInstance.IsValid())
 		{
 			NodeOwningThisAssetInstance.Get()->TriggerFirstOutput(true);
 		}
