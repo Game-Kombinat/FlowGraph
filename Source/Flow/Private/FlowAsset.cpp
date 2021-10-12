@@ -231,7 +231,13 @@ void UFlowAsset::InitializeInstance(const TWeakObjectPtr<UObject> InOwner, UFlow
 {
 	Owner = InOwner;
 	TemplateAsset = InTemplateAsset;
-	dataContext->PrepareRuntimeData(InOwner);
+	if (dataContext) {
+		dataContext->PrepareRuntimeData(InOwner);
+	}
+	else {
+		UE_LOG(LogTemp, Error, TEXT("No DataContext on FlowAsset. Will put in an empty default to prevent crashes!"));
+		dataContext = NewObject<UGameDataContext>(this, UGameDataContext::StaticClass(), NAME_None, RF_Transient);
+	}
 
 	for (TPair<FGuid, UFlowNode*>& Node : Nodes)
 	{
@@ -315,8 +321,11 @@ void UFlowAsset::StartFlow()
 
 void UFlowAsset::StartNamedFlow(const FName name) {
 	PreStartFlow();
-	auto customStartNode = CustomInputNodes[name];
-	ensureAlways(customStartNode);
+	const auto customStartNode = CustomInputNodes[name];
+	if (!customStartNode) {
+		UE_LOG(LogTemp, Error, TEXT("The start node %s does not exist. Will not start this flow!"), name.ToString());
+		return;
+	}
 	RecordedNodes.Add(customStartNode);
 	customStartNode->TriggerFirstOutput(true);
 }
