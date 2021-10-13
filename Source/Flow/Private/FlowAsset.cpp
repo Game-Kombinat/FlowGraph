@@ -323,7 +323,7 @@ void UFlowAsset::StartNamedFlow(const FName name) {
 	PreStartFlow();
 	const auto customStartNode = CustomInputNodes[name];
 	if (!customStartNode) {
-		UE_LOG(LogTemp, Error, TEXT("The start node %s does not exist. Will not start this flow!"), name.ToString());
+		UE_LOG(LogTemp, Error, TEXT("The start node %s does not exist. Will not start this flow!"), *name.ToString());
 		return;
 	}
 	RecordedNodes.Add(customStartNode);
