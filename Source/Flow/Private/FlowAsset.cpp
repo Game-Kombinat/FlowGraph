@@ -314,7 +314,10 @@ void UFlowAsset::StartFlow()
 {
 	PreStartFlow();
 
-	ensureAlways(StartNode);
+	if (!StartNode) {
+		UE_LOG(LogTemp, Error, TEXT("No default Start node on this flow. Nothing to start."));
+		return;
+	}
 	RecordedNodes.Add(StartNode);
 	StartNode->TriggerFirstOutput(true);
 }
