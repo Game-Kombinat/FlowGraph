@@ -40,7 +40,7 @@ void UFlowNode_Comparator::ExecuteInput(const FName& pinName) {
             TriggerOutput(FName("False"), true);
     }
 }
-
+#if WITH_EDITOR
 FString UFlowNode_Comparator::GetNodeDescription() const {
     FString op;
     switch (operation.GetValue()) {
@@ -67,3 +67,4 @@ FString UFlowNode_Comparator::GetNodeDescription() const {
     }
     return FString::Format(TEXT("If {0} {1} {2}"), {keyA.name.ToString(), op, keyB.name.ToString()});
 }
+#endif

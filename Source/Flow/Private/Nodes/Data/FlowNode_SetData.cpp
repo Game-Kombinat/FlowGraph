@@ -42,6 +42,7 @@ void UFlowNode_SetData::ExecuteInput(const FName& pinName) {
     TriggerFirstOutput(true);
 }
 
+#if WITH_EDITOR
 FString UFlowNode_SetData::GetNodeDescription() const {
     FString op;
     switch (operation.GetValue()) {
@@ -72,3 +73,4 @@ FString UFlowNode_SetData::GetNodeDescription() const {
 FString UFlowNode_SetData::GetStatusString() const {
     return Super::GetStatusString();
 }
+#endif

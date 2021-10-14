@@ -20,7 +20,7 @@ void UFlowNode_IsTrue::ExecuteInput(const FName& pinName) {
         TriggerOutput(FName("False"));
     }
 }
-
+#if WITH_EDITOR
 FString UFlowNode_IsTrue::GetNodeDescription() const {
     return FString::Format(TEXT("If {0} is True"), {key.name.ToString()});
 }
@@ -28,3 +28,4 @@ FString UFlowNode_IsTrue::GetNodeDescription() const {
 FString UFlowNode_IsTrue::GetStatusString() const {
     return Super::GetStatusString();
 }
+#endif
